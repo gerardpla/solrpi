@@ -1,0 +1,15 @@
+[Unit]
+Description=Solar and grid consumption LED matrix display
+After=multi-user.target
+
+[Service]
+User=root
+Restart=on-failure
+ExecStart=/usr/local/solrpi/.venv/bin/python3 /usr/local/solrpi/solrpi_main.py
+
+[Install]
+WantedBy=multi-user.target
+
+# sudo systemctl daemon-reload
+# sudo systemctl enable solrpi
+# sudo systemctl start solrpi

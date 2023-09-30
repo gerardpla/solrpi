@@ -1,0 +1,16 @@
+[tool.poetry]
+name = "solrpi"
+version = "0.1"
+description = "Fronius PV / Grid / Battery Display"
+readme = "README.md"
+authors = [
+    "Gérard Plangger <gerard.plangger@gmx.net>",
+]
+repository = "https://github.com/gerardpla/solrpi"
+
+packages = [
+    { include = "solrpi" },
+    { include = "solrpi_main.py" },
+    { include = "LICENSE" },
+    { include = "README.md" },
+]

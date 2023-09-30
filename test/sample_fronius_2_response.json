@@ -1,0 +1,45 @@
+{
+   "Body" : {
+      "Data" : {
+         "Inverters" : {
+            "1" : {
+               "Battery_Mode" : "disabled",
+               "DT" : 1,
+               "E_Day" : null,
+               "E_Total" : 23124142.501666665,
+               "E_Year" : null,
+               "P" : 1394.9627685546875,
+               "SOC" : null
+            }
+         },
+         "Site" : {
+            "BackupMode" : false,
+            "BatteryStandby" : true,
+            "E_Day" : null,
+            "E_Total" : 23124142.501666665,
+            "E_Year" : null,
+            "Meter_Location" : "grid",
+            "Mode" : "meter",
+            "P_Akku" : null,
+            "P_Grid" : 1164.6199999999999,
+            "P_Load" : -2556.1661425781249,
+            "P_PV" : 1433.4605407714844,
+            "rel_Autonomy" : 54.438798769731953,
+            "rel_SelfConsumption" : 100.0
+         },
+         "Smartloads" : {
+            "Ohmpilots" : {}
+         },
+         "Version" : "12"
+      }
+   },
+   "Head" : {
+      "RequestArguments" : {},
+      "Status" : {
+         "Code" : 0,
+         "Reason" : "",
+         "UserMessage" : ""
+      },
+      "Timestamp" : "2023-10-18T12:18:22+00:00"
+   }
+}
