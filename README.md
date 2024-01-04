@@ -27,6 +27,11 @@ Requires:
 
 ## Installation
 
+Installation is only possible on the target hardware, as it also installs required drivers, which don't compile on all systems.
+
+So if you are only interested in seeing a little demo about how the software behaves in action without requiring to purchase the hardware, 
+simply run `make asciidemo` in a shell of your favorite Python development platform, e.g. Linux or MacOS.
+
 1. Get your raspberry and attach the LED display to it. Make sure it's updated with the latest OS updates.
 2. `git clone` this project onto your Raspberry
 3. Run a test to see if all system requirements are found and solrpi basically runs: `make test`
