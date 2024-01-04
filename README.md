@@ -55,7 +55,7 @@ That's why I keep a [Makefile](./Makefile): it helps me at least remember how to
 You will want to put the display into a casing. There might be some on the market that suit your needs. 
 I went for a self-made wooden case, there are some pictures in the [doc](doc/README.md) folder for inspiration.
 
-![wooden-case](doc/solrpi_wood-case-wall-mounted.jpg)
+![wooden-case](doc/solrpi_wood-case-wall-mount-front.jpg)
 
 ## Adding support for other power meters / inverters
 
