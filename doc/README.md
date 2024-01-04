@@ -15,6 +15,12 @@ The acrylic glass fitted into its place:
 
 ![construction-step3](./solrpi_wood-case-3.jpg)
 
-Mounted on a wall, with the USB power cable running through some installation cable tube, it may look like this:
+The USB cable needs to be cut free from too much plastic around the connector plug, is bent into place and is reinforced with some hot glue (not visible on the pic):
 
-![wall-mounted](./solrpi_wood-case-wall-mounted.jpg)
+![wood-case-cabling](./solrpi_wood-case-cabling.jpg)
+
+Mounted on a wall, with the USB power cable running through some existing installation cable tube, it may look like this in the end:
+
+![wall-mount-back](./solrpi_wood-case-wall-mount-back.jpg)
+
+![wall-mount-front](./solrpi_wood-case-wall-mount-front.jpg)
