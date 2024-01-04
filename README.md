@@ -11,7 +11,7 @@ I found indeed nice-looking dashboards for tablet devices. But for different rea
 I just wanted a display to show the _current_ consumption and production. 
 No history, no average, no aggregation, just what's happening right now, visible at a glance, without reading numbers.
 
-After shortly searching for existing solutions in the Internet without success, this little project idea was born.
+After shortly searching for existing solutions on the Internet without success, this little project idea was born.
 
 ## Solution
 
