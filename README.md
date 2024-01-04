@@ -8,8 +8,8 @@ solrpi - a minimalistic, grid consumption and solar power production LED display
 
 To raise awareness about power consumption and solar power production in daily life, I was looking for a very simple, low-power display. 
 I found indeed nice-looking dashboards for tablet devices. But for different reasons, they didn't really suit my needs. 
-I just wanted a display ro show the _current_ consumption and production. 
-No history, no average, no aggregation, just what's happening right now, visible at a glance.
+I just wanted a display to show the _current_ consumption and production. 
+No history, no average, no aggregation, just what's happening right now, visible at a glance, without reading numbers.
 
 After shortly searching for existing solutions in the Internet without success, this little project idea was born.
 
@@ -18,8 +18,9 @@ After shortly searching for existing solutions in the Internet without success, 
 The solution you are looking at consists of low cost hardware, easily obtainable through online shops selling Raspberry hardware.
 
 Requires:
-- Raspberry Pi (preferrably Zero because of its smaller size, but works also with larger boards)
+- Raspberry Pi (preferrably Zero W because of its smaller size, but works also with larger boards)
 - an appropriate USB power cable and adapter
+- Wifi AP
 - RGB LED HAT WS281x
 - Python 3.x runtime
 - A Web API delivering solar and grid power values (see [Limitations](#limitations))
