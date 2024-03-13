@@ -6,6 +6,7 @@ case $yn in
     * ) echo "Aborting"; exit;;
 esac
 
+echo -e "\nStopping solrpi system service"
 sudo systemctl stop solrpi 2> /dev/null
 
 TARGET_DIR=/usr/local/solrpi
