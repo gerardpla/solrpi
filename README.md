@@ -45,6 +45,15 @@ You may use this code to implement your own setup. Use at your own risk, it come
 I'm not a Python expert. Though I know about the existence of poetry and alike, I seldomly use those, and so I easily forget about the correct commands. 
 That's why I keep a [Makefile](./Makefile): it helps me at least remember how to use virtual env and such... :)
 
+## Troubleshooting
+
+In case solrpi hangs (e.g. blue led not blinking), you can dump and inspect a stacktrace as follows:
+
+```
+# sudo killall -s QUIT /usr/local/solrpi/.venv/bin/python3
+# journalctl -r
+```
+
 ## Casing
 
 You will want to put the display into a casing. There might be some on the market that suit your needs. 
