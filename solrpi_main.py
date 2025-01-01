@@ -42,7 +42,7 @@ def main():
 
 	finally:
 		if renderer: renderer.clear()
-		logging.warn("Stopping solrpi")
+		logging.warning("Stopping solrpi")
 
 
 # Main
