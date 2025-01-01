@@ -11,6 +11,7 @@ import logging
 from solrpi.i_inverter import Inverter
 
 FRONIUS_URL = 'http://192.168.50.90/solar_api/v1/GetPowerFlowRealtimeData.fcgi'
+TIMEOUT_SEC = 10
 
 logger = logging.getLogger(__name__)
 
@@ -23,7 +24,7 @@ class FroniusInverter(Inverter):
 
     def get_watt(self):
         try:
-            response = requests.get(self.url)
+            response = requests.get(self.url, timeout=TIMEOUT_SEC)
             content = json.loads(response.text)
             grid = (content["Body"]["Data"]["Site"]["P_Grid"])
             pv = (content["Body"]["Data"]["Site"]["P_PV"])

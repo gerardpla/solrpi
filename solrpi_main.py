@@ -9,6 +9,7 @@
 import logging
 from solrpi.renderer import Renderer
 import signal
+import traceback
 import sys
 from solrpi.fronius_inverter import FroniusInverter
 from solrpi.neopixel import NeoPixel
@@ -20,9 +21,12 @@ logging.basicConfig(
 
 renderer_obj = None
 
-def sigterm_handler(_signo, _stack_frame):
+def sigterm_handler(signum, frame):
     if renderer_obj: renderer_obj.clear()
     sys.exit(0) # raise SystemExit(0)
+
+def quit_handler(signum, frame):
+    traceback.print_stack()
 
 def main():
 	inverter = FroniusInverter()
@@ -31,13 +35,14 @@ def main():
 	global renderer_obj
 	renderer_obj = renderer
 	signal.signal(signal.SIGTERM, sigterm_handler)
+	signal.signal(signal.SIGQUIT, quit_handler)
 	
 	try:
 		renderer.run()
 
 	finally:
 		if renderer: renderer.clear()
-		logging.warn("Stopping solrpi")
+		logging.warning("Stopping solrpi")
 
 
 # Main
