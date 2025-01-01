@@ -66,6 +66,9 @@ class Renderer:
             self.ui.setBrightness(ledmatrix.compute_brightness(pixel_indexes_target))
             pixel_indexes_transition = pixel_indexes_prev
             sleep_remain = SLEEP_SEC
+            # if there is a transition, use shorter sleep time
+            if pixel_indexes_transition != pixel_indexes_target:
+                sleep_remain /= 3
             while pixel_indexes_transition != pixel_indexes_target:
                 pixel_indexes_transition = ledmatrix.transition_step(pixel_indexes_transition, pixel_indexes_target)
                 pixels = ledmatrix.render(pixel_indexes_transition)
