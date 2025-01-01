@@ -23,6 +23,8 @@ BRIGHTNESS_SUN = 10
 
 logger = logging.getLogger(__name__)
 
+# Class for index positions.
+# Note that comparing objects compares all individual attributes, see test_solrpi_ledmatrix.test_idxs_comparison
 @dataclass
 class Idxs:
     # Note that the values are relative indexes, not absolute consumption values!

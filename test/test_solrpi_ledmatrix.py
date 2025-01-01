@@ -5,6 +5,16 @@
 
 from solrpi import ledmatrix
 
+# 
+def test_idxs_comparison():
+    idxs1 = ledmatrix.compute_idxs(200, 400)
+    idxs2 = ledmatrix.compute_idxs(200, 400)
+    idxs3 = ledmatrix.compute_idxs(200, 1000)
+    assert idxs1 == idxs2
+    assert idxs1 != idxs3
+    idxs2.pv += 1
+    assert idxs1 != idxs2
+
 def test_compute_idxs_grid_only():
     idxs = ledmatrix.compute_idxs(1800, 0)
     assert idxs.consume == 0
