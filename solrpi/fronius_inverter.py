@@ -11,7 +11,7 @@ import logging
 from solrpi.i_inverter import Inverter
 
 FRONIUS_URL = 'http://192.168.50.90/solar_api/v1/GetPowerFlowRealtimeData.fcgi'
-TIMEOUT_SEC = 10
+TIMEOUT_SEC = 1
 
 logger = logging.getLogger(__name__)
 
