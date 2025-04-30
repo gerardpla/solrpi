@@ -59,25 +59,29 @@ class Renderer:
     def run(self):
         pixel_indexes_prev = ledmatrix.Idxs()
         while True:
+            sleep_remain = SLEEP_LONG_SEC
             now = datetime.datetime.now()
-            watt = self.inverter.get_watt()
-			#if not watt or watt.len < 2 TODO ERROR HANDLING logger.error("")
-            pixel_indexes_target = ledmatrix.compute_idxs(watt[0], watt[1])
-            logger.debug("pixel_indexes_prev = {}".format(pixel_indexes_prev))
-            logger.debug("pixel_indexes_target = {}".format(pixel_indexes_target))
-            self.ui.setBrightness(ledmatrix.compute_brightness(pixel_indexes_target))
-            # if there is a transition, use shorter sleep time
-            sleep_remain = SLEEP_SHORT_SEC if pixel_indexes_prev != pixel_indexes_target else SLEEP_LONG_SEC
-            pixel_indexes_transition = pixel_indexes_prev
-            while pixel_indexes_transition != pixel_indexes_target:
-                pixel_indexes_transition = ledmatrix.transition_step(pixel_indexes_transition, pixel_indexes_target)
-                pixels = ledmatrix.render(pixel_indexes_transition)
-                logger.debug(pixels)
-                self.map_from_matrix(pixels)
-                self.ui.draw()
-                time.sleep(SLEEP_TRANSITION_STEP_SEC)
-                sleep_remain -= SLEEP_TRANSITION_STEP_SEC
-            pixel_indexes_prev = pixel_indexes_target
+            try:
+                watt = self.inverter.get_watt()
+                #if not watt or watt.len < 2 TODO ERROR HANDLING logger.error("")
+                pixel_indexes_target = ledmatrix.compute_idxs(watt[0], watt[1])
+                logger.debug("pixel_indexes_prev = {}".format(pixel_indexes_prev))
+                logger.debug("pixel_indexes_target = {}".format(pixel_indexes_target))
+                self.ui.setBrightness(ledmatrix.compute_brightness(pixel_indexes_target))
+                # if there is a transition, use shorter sleep time
+                if pixel_indexes_prev != pixel_indexes_target: sleep_remain = SLEEP_SHORT_SEC
+                pixel_indexes_transition = pixel_indexes_prev
+                while pixel_indexes_transition != pixel_indexes_target:
+                    pixel_indexes_transition = ledmatrix.transition_step(pixel_indexes_transition, pixel_indexes_target)
+                    pixels = ledmatrix.render(pixel_indexes_transition)
+                    logger.debug(pixels)
+                    self.map_from_matrix(pixels)
+                    self.ui.draw()
+                    time.sleep(SLEEP_TRANSITION_STEP_SEC)
+                    sleep_remain -= SLEEP_TRANSITION_STEP_SEC
+                pixel_indexes_prev = pixel_indexes_target
+            except:
+                logger.warning("Error during fetching and rendering new values. Keeping previous display.")
 
             if sleep_remain > 0:
                 time.sleep(sleep_remain)
