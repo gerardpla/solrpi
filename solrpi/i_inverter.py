@@ -8,5 +8,6 @@ class Inverter:
     # get_watt() returns array with two values: grid, pv (unit [Watt])
     # pv is always positive
     # grid<0 == pv into grid; grid>0 == grid consumption
+    # raises an exception in case of error
     def get_watt(self):
         pass

@@ -33,4 +33,4 @@ class FroniusInverter(Inverter):
             return [grid, pv]
         except requests.exceptions.RequestException as err:
             logger.error("An error occurred reading Fronius at URL '{}'. Will keep trying. Error: '{}'", self.url, err)
-            return [0, 0]
+            raise err
