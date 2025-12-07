@@ -1,27 +1,28 @@
 # define the name of the virtual environment directory
 VENV := .venv
+PYTHON := $(VENV)/bin/python3
+PIP = $(VENV)/bin/pip
 
 # default target, when make executed without arguments
 all: venv
 
-venv_base: requirements_base.txt
+$(VENV)/bin/activate: requirements_base.txt
 	python3 -m venv $(VENV)
-	./$(VENV)/bin/pip install -r requirements_base.txt
+	$(PIP) install -r requirements_base.txt
 
-venv_runtime: requirements_base.txt requirements_runtime.txt
-	python3 -m venv $(VENV)
-	./$(VENV)/bin/pip install -r requirements_base.txt -r requirements_runtime.txt
+$(VENV)/lib/python3.11/site-packages/rpi_ws281x: ./$(VENV)/bin/activate requirements_runtime.txt
+	$(PIP) install -r requirements_runtime.txt
 
-pkg: venv_runtime
+pkg: $(VENV)/lib/python3.11/site-packages/rpi_ws281x
 	poetry build
 
 test: runpytest
 
-run: venv_runtime
-	sudo ./$(VENV)/bin/python solrpi_main.py
+run: $(VENV)/lib/python3.11/site-packages/rpi_ws281x
+	sudo $(PYTHON) solrpi_main.py
 
-runpytest: venv_base
-	./$(VENV)/bin/python3 -m pytest -rP
+runpytest: $(VENV)/bin/activate
+	$(PYTHON) -m pytest -rP
 
 install:
 	bash install.sh
@@ -33,7 +34,7 @@ clean:
 	rm -rf $(VENV)
 	rm -rf dist
 
-asciidemo: venv_base
-	./$(VENV)/bin/python3 solrpi_demo_ascii.py
+asciidemo: $(VENV)/bin/activate
+	$(PYTHON) solrpi_demo_ascii.py
 
-.PHONY: all venv test clean install
+.PHONY: all test clean install
