@@ -17,15 +17,15 @@ def test_idxs_comparison():
 
 def test_compute_idxs_grid_only():
     idxs = ledmatrix.compute_idxs(1800, 0)
-    assert idxs.consume == 0
     assert idxs.grid == round(1800 / ledmatrix.WATT_PER_PIXEL)
+    assert idxs.consume == idxs.grid
     assert idxs.pv == idxs.grid
 
 def test_compute_idxs_self_consumption_only():
     idxs = ledmatrix.compute_idxs(0, 1800)
+    assert idxs.grid == 0
     assert idxs.consume == round(1800 / ledmatrix.WATT_PER_PIXEL)
-    assert idxs.grid == idxs.consume
-    assert idxs.pv == idxs.grid
+    assert idxs.pv == idxs.consume
 
 def test_compute_idxs_pv_only():
     idxs = ledmatrix.compute_idxs(-1800, 1800)
@@ -41,8 +41,8 @@ def test_compute_idxs_zero():
 
 def test_compute_idxs_max():
     idxs = ledmatrix.compute_idxs(30000, 0)
-    assert idxs.consume == 0
     assert idxs.grid == ledmatrix.NUM_PIXELS
+    assert idxs.consume == idxs.grid
     assert idxs.pv == idxs.pv
 
 def test_transition_pv_down():
@@ -62,7 +62,7 @@ def test_transition_combined():
     to_idxs = ledmatrix.compute_idxs(0, 1000) # self consumption only
     transition_idxs = ledmatrix.transition_step(from_idxs, to_idxs)
     assert transition_idxs.consume == from_idxs.consume+1
-    assert transition_idxs.grid == from_idxs.grid+1
+    assert transition_idxs.charge == from_idxs.charge+1
     assert transition_idxs.pv == from_idxs.pv-1
 
 def test_render_grid_only():
@@ -89,8 +89,9 @@ def test_render_grid_with_pv():
     matrix = ledmatrix.render(idxs)
     print(matrix)
 
-    assert matrix[0][0] == ledmatrix.PIX_CONSUME
-    assert matrix[2][3] == ledmatrix.PIX_GRID
+    assert matrix[0][0] == ledmatrix.PIX_GRID
+    assert matrix[2][0] == ledmatrix.PIX_GRID
+    assert matrix[2][3] == ledmatrix.PIX_CONSUME
     assert matrix[3][0] == ledmatrix.PIX_EMPTY
 
 def test_brightness():
@@ -104,28 +105,28 @@ def test_brightness():
 
 def test_compute_idxs_battery_charge_with_export():
     idxs = ledmatrix.compute_idxs(-1200, 4400, -2400)
+    assert idxs.grid == 0
+    assert idxs.discharge == 0
     assert idxs.consume == round(800 / ledmatrix.WATT_PER_PIXEL)
-    assert idxs.discharge == idxs.consume
     assert idxs.charge == round(3200 / ledmatrix.WATT_PER_PIXEL)
-    assert idxs.grid == idxs.charge
     assert idxs.pv == round(4400 / ledmatrix.WATT_PER_PIXEL)
 
 def test_compute_idxs_battery_discharge_with_grid():
     idxs = ledmatrix.compute_idxs(800, 400, 1600)
-    assert idxs.consume == round(400 / ledmatrix.WATT_PER_PIXEL)
-    assert idxs.discharge == round(2000 / ledmatrix.WATT_PER_PIXEL)
-    assert idxs.charge == idxs.discharge
-    assert idxs.grid == round(2800 / ledmatrix.WATT_PER_PIXEL)
-    assert idxs.pv == idxs.grid
+    assert idxs.grid == round(800 / ledmatrix.WATT_PER_PIXEL)
+    assert idxs.discharge == round(2400 / ledmatrix.WATT_PER_PIXEL)
+    assert idxs.consume == round(2800 / ledmatrix.WATT_PER_PIXEL)
+    assert idxs.charge == idxs.consume
+    assert idxs.pv == idxs.consume
 
 def test_compute_idxs_battery_charge_from_grid():
     # charging from PV and grid: only the PV part is shown as charge, the rest as grid import
     idxs = ledmatrix.compute_idxs(1400, 600, -2000)
-    assert idxs.consume == 0
-    assert idxs.discharge == 0
-    assert idxs.charge == round(600 / ledmatrix.WATT_PER_PIXEL)
-    assert idxs.grid == round(2000 / ledmatrix.WATT_PER_PIXEL)
-    assert idxs.pv == idxs.grid
+    assert idxs.grid == round(1400 / ledmatrix.WATT_PER_PIXEL)
+    assert idxs.discharge == idxs.grid
+    assert idxs.consume == idxs.grid
+    assert idxs.charge == round(2000 / ledmatrix.WATT_PER_PIXEL)
+    assert idxs.pv == idxs.charge
 
 def test_compute_idxs_battery_zero_unchanged():
     assert ledmatrix.compute_idxs(-500, 1800, 0) == ledmatrix.compute_idxs(-500, 1800)
@@ -155,11 +156,12 @@ def test_render_battery_discharge():
     matrix = ledmatrix.render(idxs)
     print(matrix)
 
-    assert matrix[0][0] == ledmatrix.PIX_CONSUME
-    assert matrix[0][3] == ledmatrix.PIX_DISCHARGE
-    assert matrix[2][0] == ledmatrix.PIX_DISCHARGE
-    assert matrix[2][3] == ledmatrix.PIX_GRID
-    assert matrix[3][3] == ledmatrix.PIX_GRID
+    assert matrix[0][0] == ledmatrix.PIX_GRID
+    assert matrix[0][3] == ledmatrix.PIX_GRID
+    assert matrix[1][0] == ledmatrix.PIX_DISCHARGE
+    assert matrix[2][3] == ledmatrix.PIX_DISCHARGE
+    assert matrix[3][3] == ledmatrix.PIX_CONSUME
+    assert matrix[3][2] == ledmatrix.PIX_CONSUME
     assert matrix[3][0] == ledmatrix.PIX_EMPTY
 
 def test_brightness_battery_charge():

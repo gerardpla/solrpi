@@ -31,23 +31,23 @@ logger = logging.getLogger(__name__)
 class Idxs:
     # Note that the values are relative indexes, not absolute consumption values!
     # Each value is the end index of its layer, layers are stacked bottom to top in this order,
-    # so consume <= discharge <= charge <= grid <= pv
-    consume: int
-    discharge: int
-    charge: int
+    # so grid <= discharge <= consume <= charge <= pv
     grid: int
+    discharge: int
+    consume: int
+    charge: int
     pv: int
 
-    def __init__(self, consume: int=0, discharge: int=0, charge: int=0, grid: int=0, pv: int=0):
-        self.consume = consume
-        self.discharge = discharge
-        self.charge = charge
+    def __init__(self, grid: int=0, discharge: int=0, consume: int=0, charge: int=0, pv: int=0):
         self.grid = grid
+        self.discharge = discharge
+        self.consume = consume
+        self.charge = charge
         self.pv = pv
 
 
 def compute_brightness(idxs: Idxs):
-	if (idxs.consume > 3) or (idxs.pv - idxs.grid > 3) or (idxs.charge - idxs.discharge > 3): # at least three pixels PV (self-consumption, export or battery charge)
+	if (idxs.consume - idxs.discharge > 3) or (idxs.pv - idxs.charge > 3) or (idxs.charge - idxs.consume > 3): # at least three pixels PV (self-consumption, export or battery charge)
 		return BRIGHTNESS_SUN
 	return BRIGHTNESS_DAY
 
@@ -94,14 +94,14 @@ def compute_idxs(grid: float, pv: float, battery: float = 0) -> Idxs:
     # Nur der Anteil Laden aus PV wird als Laden angezeigt, Laden aus dem Netz bleibt Netzbezug
     laden_pv = min(laden, max(pv - rueckspeisung, 0))
 
-    # Layer 1) Eigenverbrauch = PV abzüglich Laden und Rückspeisung
+    # Eigenverbrauch = PV abzüglich Laden und Rückspeisung
     eigenverbrauch = max(pv - laden_pv - rueckspeisung, 0)
-    # Layer 2) Batterie-Entladung, Layer 3) Batterie-Laden, Layer 4) Netzbezug, Layer 5) Rückspeisung
+    # Layer 1) Netzbezug, Layer 2) Batterie-Entladung, Layer 3) Eigenverbrauch, Layer 4) Batterie-Laden, Layer 5) Rückspeisung
     # Entladen/Laden und Netzbezug/Rückspeisung schliessen sich jeweils gegenseitig aus.
     # Grenzen werden auf die Gesamthöhe begrenzt (z.B. Rückspeisung aus der Batterie).
     grenzen = []
     summe = 0
-    for watt in [eigenverbrauch, entladen, laden_pv, netzbezug, rueckspeisung]:
+    for watt in [netzbezug, entladen, eigenverbrauch, laden_pv, rueckspeisung]:
         summe += watt
         grenzen.append(_watt_to_idx(min(summe, gesamt)))
 
@@ -111,7 +111,7 @@ def compute_idxs(grid: float, pv: float, battery: float = 0) -> Idxs:
 
 # from and to are each return values of compute_idx, see above
 def transition_step(from_idxs: Idxs, to_idxs: Idxs) -> Idxs:
-    transition_idxs = Idxs(from_idxs.consume, from_idxs.discharge, from_idxs.charge, from_idxs.grid, from_idxs.pv)
+    transition_idxs = Idxs(from_idxs.grid, from_idxs.discharge, from_idxs.consume, from_idxs.charge, from_idxs.pv)
 
     if transition_idxs.consume < to_idxs.consume: transition_idxs.consume += 1
     elif transition_idxs.consume> to_idxs.consume: transition_idxs.consume -= 1
@@ -134,10 +134,10 @@ def transition_step(from_idxs: Idxs, to_idxs: Idxs) -> Idxs:
 def render(pixel_idxs: Idxs):
     pixel_matrix = [[PIX_EMPTY for x in range(WIDTH)] for y in range(HEIGHT)]
 
-    _set_matrix_color(pixel_matrix, 0, pixel_idxs.consume, PIX_CONSUME)
-    _set_matrix_color(pixel_matrix, pixel_idxs.consume, pixel_idxs.discharge, PIX_DISCHARGE)
-    _set_matrix_color(pixel_matrix, pixel_idxs.discharge, pixel_idxs.charge, PIX_CHARGE)
-    _set_matrix_color(pixel_matrix, pixel_idxs.charge, pixel_idxs.grid, PIX_GRID)
-    _set_matrix_color(pixel_matrix, pixel_idxs.grid, pixel_idxs.pv, PIX_PV)
+    _set_matrix_color(pixel_matrix, 0, pixel_idxs.grid, PIX_GRID)
+    _set_matrix_color(pixel_matrix, pixel_idxs.grid, pixel_idxs.discharge, PIX_DISCHARGE)
+    _set_matrix_color(pixel_matrix, pixel_idxs.discharge, pixel_idxs.consume, PIX_CONSUME)
+    _set_matrix_color(pixel_matrix, pixel_idxs.consume, pixel_idxs.charge, PIX_CHARGE)
+    _set_matrix_color(pixel_matrix, pixel_idxs.charge, pixel_idxs.pv, PIX_PV)
 
     return pixel_matrix
