@@ -15,7 +15,7 @@ TIMEOUT_SEC = 1
 
 logger = logging.getLogger(__name__)
 
-# Returns array with two values: grid, pv (unit [Watt]). 
+# Returns array with three values: grid, pv, battery (unit [Watt]).
 # See i_inverter.py
 class FroniusInverter(Inverter):
 
@@ -28,9 +28,10 @@ class FroniusInverter(Inverter):
             content = json.loads(response.text)
             grid = (content["Body"]["Data"]["Site"]["P_Grid"])
             pv = (content["Body"]["Data"]["Site"]["P_PV"])
-            #battery = (content["Body"]["Data"]["Site"]["P_Akku"])
-            logger.debug("grid={}, pv={}".format(grid, pv))
-            return [grid, pv]
+            # P_Akku is null if no battery is installed
+            battery = (content["Body"]["Data"]["Site"]["P_Akku"]) or 0
+            logger.debug("grid={}, pv={}, battery={}".format(grid, pv, battery))
+            return [grid, pv, battery]
         except requests.exceptions.RequestException as err:
-            logger.error("An error occurred reading Fronius at URL '{}'. Will keep trying. Error: '{}'", self.url, err)
+            logger.error("An error occurred reading Fronius at URL '{}'. Will keep trying. Error: '{}'".format(self.url, err))
             raise err

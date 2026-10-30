@@ -9,6 +9,8 @@ COLOR_BLACK = '-'
 COLOR_RED = '\033[91m' + 'R' + '\033[0m'
 COLOR_GREEN = '\033[92m' + 'G' + '\033[0m'
 COLOR_YELLOW = '\033[93m' + 'Y' + '\033[0m'
+COLOR_MAGENTA = '\033[95m' + 'M' + '\033[0m'
+COLOR_ORANGE = '\033[38;5;208m' + 'O' + '\033[0m'
 COLOR_BLINK = '\033[94m' + '*' + '\033[0m'
 
 # LED strip configuration:
@@ -60,6 +62,12 @@ class AsciiUI(UIDevice):
 
     def getColorYellow(self):
         return COLOR_YELLOW
+
+    def getColorMagenta(self):
+        return COLOR_MAGENTA
+
+    def getColorOrange(self):
+        return COLOR_ORANGE
 
     def getColorBlack(self):
         return COLOR_BLACK

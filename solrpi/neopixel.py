@@ -10,6 +10,8 @@ COLOR_BLACK = Color(0,0,0)
 COLOR_RED = Color(255,0,0)
 COLOR_GREEN = Color(0,255,0)
 COLOR_YELLOW = Color(255,255,0)
+COLOR_MAGENTA = Color(255,0,255)
+COLOR_ORANGE = Color(255,100,0)
 COLOR_BLINK = Color(0,0,50)
 
 # LED strip configuration:
@@ -57,6 +59,12 @@ class NeoPixel(UIDevice):
 
     def getColorYellow(self):
         return COLOR_YELLOW
+
+    def getColorMagenta(self):
+        return COLOR_MAGENTA
+
+    def getColorOrange(self):
+        return COLOR_ORANGE
 
     def getColorBlack(self):
         return COLOR_BLACK

@@ -5,20 +5,27 @@
 
 from solrpi.i_inverter import Inverter
 
-# grid, pv
+# grid, pv, battery
 watt_demo = [
-    [-4000, 4400],
-    [-600, 4400],
-    [1200, 2600],
-    [2800, 1000],
-    [-1400, 4400],
-    [-3400, 4400],
-    [-700, 1300],
-    [5000, 1300],
-    [8000, 1300],
-    [8000, 8000],
-    [3400, 1300],
-    [1300, 4400]
+    [-4000, 4400, 0],
+    [-600, 4400, 0],
+    [1200, 2600, 0],
+    [2800, 1000, 0],
+    [-1400, 4400, 0],
+    [-3400, 4400, 0],
+    [-700, 1300, 0],
+    [5000, 1300, 0],
+    [8000, 1300, 0],
+    [8000, 8000, 0],
+    [3400, 1300, 0],
+    [1300, 4400, 0],
+    [-1200, 4400, -2400], # charging battery and export to grid
+    [0, 4400, -3600], # charging battery only
+    [800, 0, 1600], # battery discharge and grid import
+    [0, 400, 1200], # battery discharge only
+    [0, 1200, -400], # charging battery with small PV surplus
+    [1500, 2000, 2000], # high load: PV, battery discharge and grid import
+    [1500, 500, -2000] # charging battery from PV and grid
 ]
 
 class InverterMock(Inverter):

@@ -20,4 +20,19 @@ def test_fronius():
                   json=sample_response, status=200)
     
     retval = inverter.get_watt()
-    assert retval == [-1166.3, 1390.1468505859375]
+    assert retval == [-1166.3, 1390.1468505859375, 0]
+
+@responses.activate
+def test_fronius_battery():
+
+    file = open('test/sample_fronius_3_response.json')
+    sample_response = json.load(file)
+    file.close()
+
+    inverter = fronius_inverter.FroniusInverter()
+
+    responses.add(responses.GET, fronius_inverter.FRONIUS_URL,
+                  json=sample_response, status=200)
+
+    retval = inverter.get_watt()
+    assert retval == [9.16, 1956.6654052734375, -1564.5528564453125]

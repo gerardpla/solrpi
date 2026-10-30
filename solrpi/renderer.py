@@ -26,7 +26,8 @@ class Renderer:
         self.inverter = inverter
         self.ui = uidevice
 
-        self.color_mapping = [self.ui.getColorBlack(), self.ui.getColorRed(), self.ui.getColorGreen(), self.ui.getColorYellow()] # index must match appropriate solrpi_led_matrix.PIX_*
+        self.color_mapping = [self.ui.getColorBlack(), self.ui.getColorRed(), self.ui.getColorGreen(), self.ui.getColorYellow(),
+                              self.ui.getColorMagenta(), self.ui.getColorOrange()] # index must match appropriate solrpi_led_matrix.PIX_*
 
     
     def get_ui(self):
@@ -64,7 +65,8 @@ class Renderer:
             try:
                 watt = self.inverter.get_watt()
                 #if not watt or watt.len < 2 TODO ERROR HANDLING logger.error("")
-                pixel_indexes_target = ledmatrix.compute_idxs(watt[0], watt[1])
+                battery = watt[2] if len(watt) > 2 else 0 # inverters without battery may return grid, pv only
+                pixel_indexes_target = ledmatrix.compute_idxs(watt[0], watt[1], battery)
                 logger.debug("pixel_indexes_prev = {}".format(pixel_indexes_prev))
                 logger.debug("pixel_indexes_target = {}".format(pixel_indexes_target))
                 self.ui.setBrightness(ledmatrix.compute_brightness(pixel_indexes_target))
