@@ -27,7 +27,7 @@ class Renderer:
         self.ui = uidevice
 
         self.color_mapping = [self.ui.getColorBlack(), self.ui.getColorRed(), self.ui.getColorGreen(), self.ui.getColorYellow(),
-                              self.ui.getColorMagenta(), self.ui.getColorOrange()] # index must match appropriate solrpi_led_matrix.PIX_*
+                              self.ui.getColorViolet(), self.ui.getColorOrange()] # index must match appropriate solrpi_led_matrix.PIX_*
 
     
     def get_ui(self):

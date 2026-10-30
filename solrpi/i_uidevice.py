@@ -36,7 +36,7 @@ class UIDevice:
     def getColorYellow(self):
         pass
 
-    def getColorMagenta(self):
+    def getColorViolet(self):
         pass
 
     def getColorOrange(self):
