@@ -11,7 +11,7 @@ COLOR_RED = Color(255,0,0)
 COLOR_GREEN = Color(0,255,0)
 COLOR_YELLOW = Color(255,255,0)
 COLOR_MAGENTA = Color(255,0,255)
-COLOR_ORANGE = Color(255,100,0)
+COLOR_ORANGE = Color(255,80,0)
 COLOR_BLINK = Color(0,0,50)
 
 # LED strip configuration:
